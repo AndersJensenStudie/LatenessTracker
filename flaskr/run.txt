@@ -1,0 +1,8 @@
+To run the server, navigate to /Lateness_tracker/ and run:
+    flask --app flaskr run --debug
+
+To init the DB, run:
+    flask --app flaskr init-db
+
+To run the server and host locally, navigate to /Lateness_tracker/ and run:
+    flask --app flaskr run --debug --host=0.0.0.0
