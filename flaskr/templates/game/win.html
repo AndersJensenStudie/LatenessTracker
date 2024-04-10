@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Game has ended{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <h1>The winner was {{ winner }}</h1>
+        <div>He was awarded {{ points }} points!</div>
+    </form>
+{% endblock %}

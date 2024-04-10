@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Game{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <label for="late_person">Who is late?</label>
+        <input name="late_person" id="late_person" value="{{ request.form['late_person'] }}" required>
+
+        <label for="arrival">Scheduled time:</label>
+        <input type="time" name="arrival" id="arrival" value="{{ request.form['arrival'] }}" required>
+
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}
