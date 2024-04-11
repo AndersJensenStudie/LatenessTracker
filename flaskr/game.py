@@ -100,7 +100,7 @@ def game(game_id):
     try:
         db = get_db()
         current_game = db.execute(
-            'SELECT DISTINCT g.id, created, late_person, winner_id, user.username'
+            'SELECT DISTINCT g.id, created, arrival_time, late_person, winner_id, user.username'
             ' FROM game as g'
             ' LEFT JOIN user ON g.winner_id = user.id'
             ' WHERE g.id = ?', (game_id, )
@@ -175,6 +175,16 @@ def win(game_id):
         print("Error when trying commit winner:", e)
 
     points = 1
+    try:
+        db = get_db()
+        db.execute(
+            'UPDATE user'
+            ' SET points = points + ?'
+            ' where id = ?', (points, winner_id, )
+        )
+    except Exception as e:
+        print("Error adding points:", e)
+
     return render_template('game/win.html', winner=winner['username'], points=points)
 
 

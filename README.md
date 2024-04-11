@@ -15,13 +15,19 @@ flask --app flaskr init-db
 ```
 The same command resets the database (**This will delete users and passwords**)
 ## Roadmap
-Features to be added:
+### Need to have
 - ~~Login~~
 - ~~Game creation~~
 - Scoring
+- Easier navigation
+- If a person with a game against them arrives on time, they are awarded points
+- Toggle academic quarter
+
+### Nice-to-have
 - Achievements
 - Better CSS
-- Easier navigation
+- Leaderboard (most points, most won games, most lates)
 
 ## Known Bugs
-- 
+- can click "join game" more than once
+- ~~guesses can be added after the fact~~
