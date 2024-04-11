@@ -39,8 +39,11 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     # import blog and register the blueprint in the app
-    from . import blog
-    app.register_blueprint(blog.bp)
+    #from . import blog
+    # app.register_blueprint(blog.bp)
+    # app.add_url_rule('/', endpoint='index')
+    from . import game
+    app.register_blueprint(game.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app
