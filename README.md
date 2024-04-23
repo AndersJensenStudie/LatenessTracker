@@ -1,7 +1,7 @@
 # LatenessTracker
 A flask based webserver to track and shame your coursemates for being late.
 ## Running LatenessTracker
-To run the tracker, simply navigate to the `/LatenessTracker/` and run:
+To run the tracker, simply navigate to the `./LatenessTracker/` and run:
 ```
 flask --app flaskr run --debug
 ```
@@ -14,8 +14,14 @@ First time you run the application, you should run to build the database:
 flask --app flaskr init-db
 ```
 The same command resets the database (**This will delete users and passwords**)
+
+If you want to run custom SQL-insertions or -updates (or anything else, where you do not need the output) edit the `run.sql`-file and run it with:
+```
+flask --app flaskr sql_file  
+```
+
 ## Roadmap
-### Need to have
+### Need-to-have
 - ~~Login~~
 - ~~Game creation~~
 - Scoring

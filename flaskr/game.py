@@ -3,8 +3,10 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import time
+
+import random
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
@@ -140,15 +142,18 @@ def win(game_id):
         players = []
         print("Error when trying to get guesses for all players:", e)
 
-    at = time()
-    closest_time = -1
+    at = datetime.utcfromtimestamp(time())
+    closest_delta = timedelta.max
     winner_id = None
-    for p in players:
-        current_time = (date_to_time(p['guessed_time']) - at)**2
+    print(at)
 
-        if (closest_time == -1) or (current_time < closest_time):
-            closest_time = current_time
-            winner_id = p['player_id']
+    for p in players:
+        guessed_time = get_today_time(p['guessed_time'])
+        current_delta = abs(at - guessed_time)
+        print("Player {}: Guessed Time: {}, Time Difference: {}".format(p['id'], guessed_time, current_delta))
+        if current_delta < closest_delta:
+            closest_delta = current_delta
+            winner_id = p['id']
 
     try:
         db = get_db()
@@ -182,21 +187,19 @@ def win(game_id):
             ' SET points = points + ?'
             ' where id = ?', (points, winner_id, )
         )
+        db.commit()
     except Exception as e:
         print("Error adding points:", e)
 
     return render_template('game/win.html', winner=winner['username'], points=points)
 
 
-def date_to_time(time_string):
-    """Converts a date string on form HH:MM to a datetime object"""
-    # create timestamp for given time
-    hour, minute = map(int, time_string.split(':'))
+def get_today_time(time_string):
+    """Converts a time string in HH:MM format to a datetime object with today's date."""
     now = datetime.now()
-    timestamp = datetime(now.year, now.month, now.day, hour, minute)
+    hour, minute = map(int, time_string.split(':'))
+    hour -= 2 # bad way of handling timezones, need to be changed when summer time ends...
+    if hour < 0:
+        hour += 24
 
-    # create timestamp for epoch
-    epoch_time = datetime(1970, 1, 1)
-
-    # return time between epoch and current
-    return (timestamp - epoch_time).total_seconds()
+    return datetime(now.year, now.month, now.day, hour, minute)

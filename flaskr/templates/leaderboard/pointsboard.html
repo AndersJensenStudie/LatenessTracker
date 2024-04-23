@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Points leaderboard{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+    <h1>Rankings</h1>
+    {% for p in players %}
+        <div>{{ loop.index }}. {{ p['username'] }}                                      {{ p['points'] }}</div>
+    {% endfor %}
+{% endblock %}
