@@ -34,7 +34,16 @@ def init_db_command():
     init_db()
     click.echo('Initialized the database.')
 
+@click.command('sql_file')
+def sql_file():
+    """Runs the run.sql-file"""
+    db = get_db()
+
+    with current_app.open_resource('run.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+
 def init_app(app):
     """Construct the Database port of the Flask app"""
     app.teardown_appcontext(close_db) # tells flask to call close_db when cleaning up
+    app.cli.add_command(sql_file) # adds run-command as a command that can be called with the 'flask'-command
     app.cli.add_command(init_db_command) # adds init_db_command as a command that can be called with the ´flask´-command

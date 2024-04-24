@@ -14,7 +14,9 @@
         <div>
           <h1>{{ game['late_person'] }} : {{ game['arrival_time'] }}</h1>
         </div>
-          <a class="action" href="{{ url_for('game.guess', game_id=game['id']) }}">Join game</a>
+          {% if game['winner_id'] == None %}
+            <a class="action" href="{{ url_for('game.guess', game_id=game['id']) }}">Join game</a>
+          {% endif %}
       </header>
           {% if game['winner_id'] != None %}
       <div class = "about">Won by: {{ game['username'] }}</div>

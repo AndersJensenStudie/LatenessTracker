@@ -1,17 +1,38 @@
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS guess;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS game;
 
 CREATE TABLE user (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    points INT DEFAULT 0
 );
 
 CREATE TABLE post (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER NOT NULL,
-  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  title TEXT NOT NULL,
-  body TEXT NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES user (id)
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author_id INTEGER NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    title TEXT NOT NULL,
+    body TEXT NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES user (id)
+);
+
+CREATE TABLE game (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    late_person VARCHAR(30) NOT NULL,
+    arrival_time VARCHAR(5) DEFAULT NULL,
+    winner_id INTEGER DEFAULT NULL,
+    FOREIGN KEY (winner_id) REFERENCES user (id)
+);
+
+CREATE TABLE guess (
+    player_id INTEGER NOT NULL,
+    game_id INTEGER NOT NULL,
+    guessed_time VARCHAR(5) NOT NULL,
+    PRIMARY KEY (player_id, game_id),
+    FOREIGN KEY (player_id) REFERENCES user (id),
+    FOREIGN KEY (game_id) REFERENCES game (id)
 );

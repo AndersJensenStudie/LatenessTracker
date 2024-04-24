@@ -30,7 +30,7 @@ def create_app(test_config=None):
         """Return a friendly HTTP greeting."""
         return 'Hello, World!'
 
-    # import db and and init the db part of the app
+    # import db and init the db part of the app
     from . import db
     db.init_app(app)
 
@@ -38,10 +38,11 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
-    # import blog and register the blueprint in the app
-    #from . import blog
-    # app.register_blueprint(blog.bp)
-    # app.add_url_rule('/', endpoint='index')
+    # import leaderboard and register blueprint
+    from . import leaderboard
+    app.register_blueprint(leaderboard.bp)
+
+    # import game and register blueprint
     from . import game
     app.register_blueprint(game.bp)
     app.add_url_rule('/', endpoint='index')
