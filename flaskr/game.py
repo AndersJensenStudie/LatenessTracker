@@ -166,6 +166,7 @@ def win(game_id):
         winner = None
         print("Error when trying to get winner:", e)
 
+    # set winner
     try:
         db = get_db()
         db.execute(
@@ -176,30 +177,50 @@ def win(game_id):
         )
         db.commit()
     except Exception as e:
-        winner = None
         print("Error when trying commit winner:", e)
 
-    points = 1
-    try:
-        db = get_db()
-        db.execute(
-            'UPDATE user'
-            ' SET points = points + ?'
-            ' where id = ?', (points, winner_id, )
-        )
-        db.commit()
-    except Exception as e:
-        print("Error adding points:", e)
+    points = calculate_points()
+    winner = get_winner(winner_id)
+    if winner is None:
+        try:
+            db = get_db()
+            db.execute(
+                'UPDATE user'
+                ' SET points = points + ?'
+                ' where id = ?', (points, winner_id, )
+            )
+            db.commit()
+        except Exception as e:
+            print("Error adding points:", e)
 
-    return render_template('game/win.html', winner=winner['username'], points=points)
+    return render_template('game/win.html', winner=winner, points=points)
 
 
 def get_today_time(time_string):
     """Converts a time string in HH:MM format to a datetime object with today's date."""
     now = datetime.now()
     hour, minute = map(int, time_string.split(':'))
-    hour -= 2 # bad way of handling timezones, need to be changed when summer time ends...
+    hour -= 2 # bad way of handling timezones, need to be changed when summer-time ends...
     if hour < 0:
         hour += 24
 
     return datetime(now.year, now.month, now.day, hour, minute)
+
+
+def get_winner(winner_id):
+    """ Finds the winner from a given id"""
+    try:
+        db = get_db()
+        winner = db.execute('SELECT username'
+                            ' FROM user'
+                            ' WHERE id = ?', (winner_id, )).fetchone()
+    except Exception as e:
+        print("Error when trying to get winner:", e)
+        winner = "No one lol"
+
+    return winner['username']
+
+
+def calculate_points():
+    """ Calculates how many points a winner should be granted"""
+    return 1

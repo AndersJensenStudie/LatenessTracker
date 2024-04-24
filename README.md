@@ -37,3 +37,4 @@ flask --app flaskr sql_file
 ## Known Bugs
 - can click "join game" more than once
 - ~~guesses can be added after the fact~~
+- ~~Clicking refresh on the win-page gives +1 point to the winner~~
